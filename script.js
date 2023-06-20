@@ -99,7 +99,7 @@ const renderAllPlayers = (playerList) => {
             playerElement.innerHTML = `
             <h3> ${player.name}</h3>
             <h4> ${player.breed}</h4>
-            <img src=" ${player.imageUrl}" alt= '${player.name}'>
+            <img src=" ${player.imageUrl}" alt= '${player.name}'><br>
             <button class="detail-button" data-id="${player.id}">See Details</button>
             <button class="delete-button" data-id="${player.id}">Remove Player</button>
             `
@@ -130,8 +130,9 @@ const renderSinglePlayer = (player) => {
     <img src= " ${player.imageUrl}" alt= "${player.name}">
     <p> Breed: ${player.breed}</p>
     <p> Status: ${player.status}</p>
-    </div>
     <button class="back-button">Back</button>
+    </div>
+    
     `
     playerContainer.innerHTML= playerHTML
     
@@ -157,7 +158,7 @@ const renderNewPlayerForm = () => {
         <input type= 'text' id= 'name' name= 'name' placeholder= 'Name'>
         <label for= 'breed'>Breed</label>
         <input type= 'text' id= 'breed' name= 'breed' placeholder= 'Breed'>
-        <button type= 'submit'>Create Player</button> 
+        <button class= "create-button" type= 'submit'>Create Player</button> 
         `
         formElement.addEventListener("submit", async(event) => {
             event.preventDefault()
