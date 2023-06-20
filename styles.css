@@ -13,3 +13,10 @@
 h1 {
   text-align: center;
 }
+
+.single-player {
+  border: solid 1px;
+  border-radius: 12px;
+  text-align: center;
+  margin: 10px;
+}

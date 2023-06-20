@@ -25,7 +25,7 @@ const fetchAllPlayers = async () => {
 
 const fetchSinglePlayer = async (playerId) => {
     try {
-        const response = await fetch(`APIURL/${playerId}`)
+        const response = await fetch(`${APIURL}/${playerId}`)
         const player = await response.json()
         return player
 
@@ -39,12 +39,14 @@ const addNewPlayer = async (playerObj) => {
     try {
         const response = await fetch(APIURL , {
             method: 'POST',
-            body: JSON.stringify(playerObj),
-            headers: {'Content-Type' : 'application/json'}
+            headers: {'Content-Type': 'application/json' },
+            body: JSON.stringify(playerObj)
 
         })
         const data = await response.json()
         fetchAllPlayers()
+        window.location.reload()
+        return data
 
     } catch (err) {
         console.error('Oops, something went wrong with adding that player!', err);
@@ -53,12 +55,13 @@ const addNewPlayer = async (playerObj) => {
 
 const removePlayer = async (playerId) => {
     try {
-        const response = fetch(APIURL, {
+        const response = await fetch(`${APIURL}/${playerId}`, {
             method: 'DELETE',
         })
-        const data = await response.json()
+        const deletePlayer = await response.json()
         fetchAllPlayers()
         window.location.reload()
+        return deletePlayer
 
     } catch (err) {
         console.error(
@@ -96,7 +99,6 @@ const renderAllPlayers = (playerList) => {
             playerElement.innerHTML = `
             <h3> ${player.name}</h3>
             <h4> ${player.breed}</h4>
-            <p> ${player.status}</p>
             <img src=" ${player.imageUrl}" alt= '${player.name}'>
             <button class="detail-button" data-id="${player.id}">See Details</button>
             <button class="delete-button" data-id="${player.id}">Remove Player</button>
@@ -126,8 +128,8 @@ const renderSinglePlayer = (player) => {
     <div class="single-player">
     <h3> ${player.name}</h3>
     <img src= " ${player.imageUrl}" alt= "${player.name}">
-    <h4> ${player.breed}</h4>
-    <p> ${player.status}</p>
+    <p> Breed: ${player.breed}</p>
+    <p> Status: ${player.status}</p>
     </div>
     <button class="back-button">Back</button>
     `
@@ -149,27 +151,28 @@ const renderSinglePlayer = (player) => {
  */
 const renderNewPlayerForm = () => {
     try {
-        let formHtml = `
-        <form>
+        const formElement = document.createElement('form')
+        formElement.innerHTML = `
         <label for= 'name'>Name</label>
         <input type= 'text' id= 'name' name= 'name' placeholder= 'Name'>
         <label for= 'breed'>Breed</label>
         <input type= 'text' id= 'breed' name= 'breed' placeholder= 'Breed'>
-        <button type= 'submit'>Create Player</button>
-        </form>
+        <button type= 'submit'>Create Player</button> 
         `
-        newPlayerFormContainer.innerHTML= formHtml
-
-        let form = newPlayerFormContainer.querySelector('form')
-        form.addEventListener('click', async(event) =>{
+        formElement.addEventListener("submit", async(event) => {
             event.preventDefault()
-            let playerData = {
-                name: form.name.value,
-                breed: form.breed.value,
-            }
-            await addNewPlayer(playerData.name, playerData.breed)
-        })
+            const name = document.getElementById('name')
+            const breed = document.getElementById('breed')
 
+            const newPlayer = {
+                name: name.value,
+                breed: breed.value,
+            }
+            await addNewPlayer(newPlayer)
+            renderAllPlayers([newPlayer])
+        })
+    
+        newPlayerFormContainer.appendChild(formElement)
         
     } catch (err) {
         console.error('Uh oh, trouble rendering the new player form!', err);
@@ -180,7 +183,7 @@ const init = async () => {
     const players = await fetchAllPlayers();
     renderAllPlayers(players);
 
-    renderNewPlayerForm();
+    renderNewPlayerForm(players);
 }
 
 init();
