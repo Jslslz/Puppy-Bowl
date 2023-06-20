@@ -155,8 +155,6 @@ const renderNewPlayerForm = () => {
         <input type= 'text' id= 'name' name= 'name' placeholder= 'Name'>
         <label for= 'breed'>Breed</label>
         <input type= 'text' id= 'breed' name= 'breed' placeholder= 'Breed'>
-        <label for= 'image_url'>Image URL</label>
-        <input type= 'text' id = 'image_url' name= 'image_url' placeholder= 'Image URL'>
         <button type= 'submit'>Create Player</button>
         </form>
         `
@@ -168,9 +166,8 @@ const renderNewPlayerForm = () => {
             let playerData = {
                 name: form.name.value,
                 breed: form.breed.value,
-                image_url: form.image_url.value,
             }
-            await addNewPlayer(playerData.name, playerData.breed, playerData.image_url)
+            await addNewPlayer(playerData.name, playerData.breed)
         })
 
         
